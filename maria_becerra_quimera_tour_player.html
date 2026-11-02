@@ -1,0 +1,412 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>María Becerra | Quimera Tour</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+    background:#100d0b;
+    color:#f5eee5;
+    font-family:Arial,sans-serif;
+    min-height:100vh;
+    padding:25px;
+}
+.container{max-width:1150px;margin:auto}
+header{text-align:center;margin-bottom:30px}
+header h1{
+    font-size:clamp(30px,6vw,55px);
+    color:#d9ad70;
+    letter-spacing:4px;
+}
+header p{color:#b8a99a;margin-top:8px}
+.layout{
+    display:grid;
+    grid-template-columns:350px 1fr;
+    gap:25px;
+}
+.player,.playlist{
+    background:#1c1714;
+    border:1px solid #49382b;
+    border-radius:18px;
+    padding:25px;
+}
+.cover{
+    width:100%;
+    aspect-ratio:1;
+    border-radius:15px;
+    background:linear-gradient(135deg,#593b2a,#17100d,#9b7048);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:#f0d0a2;
+    font-size:35px;
+    font-weight:bold;
+    letter-spacing:3px;
+    margin-bottom:22px;
+    box-shadow:0 10px 35px #0008;
+}
+.song-info{text-align:center}
+.song-info h2{font-size:22px;margin-bottom:8px}
+.song-info p{color:#b8a99a}
+.progress-area{margin:25px 0}
+input[type=range]{
+    width:100%;
+    accent-color:#d9ad70;
+    cursor:pointer;
+}
+.time{
+    display:flex;
+    justify-content:space-between;
+    color:#b8a99a;
+    font-size:12px;
+    margin-top:7px;
+}
+.controls{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:22px;
+    margin:22px 0;
+}
+.controls button{
+    background:none;
+    border:0;
+    color:#f5eee5;
+    font-size:25px;
+    cursor:pointer;
+}
+.controls .play{
+    width:58px;height:58px;
+    border-radius:50%;
+    background:#d9ad70;
+    color:#1c1714;
+    font-size:25px;
+}
+.volume{display:flex;align-items:center;gap:12px}
+.volume span{font-size:14px}
+.playlist h2{color:#d9ad70;margin-bottom:18px}
+.search{
+    width:100%;
+    padding:13px;
+    border-radius:9px;
+    border:1px solid #554333;
+    background:#100d0b;
+    color:white;
+    margin-bottom:15px;
+    outline:none;
+}
+.upload{
+    display:block;
+    width:100%;
+    background:#d9ad70;
+    color:#1c1714;
+    border:0;
+    border-radius:9px;
+    padding:13px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-bottom:17px;
+}
+.upload:hover,.play:hover{background:#efc58d}
+#fileInput{display:none}
+.song-list{
+    max-height:530px;
+    overflow-y:auto;
+}
+.song{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    padding:13px 10px;
+    border-bottom:1px solid #382d25;
+    cursor:pointer;
+    border-radius:8px;
+}
+.song:hover{background:#30251e}
+.song.active{background:#493522}
+.number{color:#c9a477;width:25px}
+.song-name{flex:1}
+.song-name strong{display:block;font-size:14px}
+.song-name small{color:#a99a8b}
+.duration{font-size:12px;color:#b8a99a}
+.note{
+    color:#a99a8b;
+    font-size:12px;
+    line-height:1.5;
+    margin-top:15px;
+}
+@media(max-width:800px){
+    .layout{grid-template-columns:1fr}
+    .player{max-width:450px;width:100%;margin:auto}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+    <h1>MARÍA BECERRA</h1>
+    <p>QUIMERA TOUR · YOUR PERSONAL MUSIC PLAYER</p>
+</header>
+
+<div class="layout">
+
+<section class="player">
+    <div class="cover" id="cover">QUIMERA</div>
+
+    <div class="song-info">
+        <h2 id="currentTitle">Selecciona una canción</h2>
+        <p id="currentArtist">María Becerra</p>
+    </div>
+
+    <div class="progress-area">
+        <input type="range" id="progress" min="0" max="100" value="0">
+        <div class="time">
+            <span id="currentTime">0:00</span>
+            <span id="totalTime">0:00</span>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="previousSong()" title="Anterior">⏮</button>
+        <button class="play" id="playButton" onclick="togglePlay()">▶</button>
+        <button onclick="nextSong()" title="Siguiente">⏭</button>
+    </div>
+
+    <div class="volume">
+        <span>🔊 Volumen</span>
+        <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
+    </div>
+
+    <p class="note">
+        Selecciona una canción de la lista o carga tus archivos MP3 y MP4 desde tu computadora.
+    </p>
+</section>
+
+<section class="playlist">
+    <h2>LISTA DE CANCIONES</h2>
+
+    <input class="search" id="search" type="text"
+           placeholder="Buscar canción..." oninput="renderSongs()">
+
+    <label class="upload" for="fileInput">
+        ＋ CARGAR CANCIONES DESDE MI PC
+    </label>
+    <input type="file" id="fileInput" accept="audio/*,video/mp4" multiple>
+
+    <div class="song-list" id="songList"></div>
+</section>
+
+</div>
+</div>
+
+<script>
+const songsList = [
+    {
+        title:"Paulo Londra",
+        artist:"María Becerra",
+        audioUrl:"RAMEN.App.mp3"
+    },
+    {
+        title:"XROSS",
+        artist:"María Becerra",
+        audioUrl:"INFINITOS.mp3"
+    },
+    {
+        title:"Canción 3",
+        artist:"María Becerra",
+        audioUrl:"CERQUITA.mp3"
+    },
+    {title:"Canción 4",artist:"María Becerra",audioUrl:"OJALA.mp3"},
+    {title:"Canción 5",artist:"María Becerra",audioUrl:"HASTA.mp3"},
+    {title:"Canción 6",artist:"María Becerra",audioUrl:"RECUERDO.mp3"},
+    {title:"Canción 7",artist:"María Becerra",audioUrl:"DESAFIANDO.mp3"},
+    {title:"Canción 8",artist:"María Becerra",audioUrl:"DOBLE.mp3"},
+    {title:"Canción 9",artist:"María Becerra",audioUrl:"ENTRE.mp3"},
+    {title:"Canción 10",artist:"María Becerra",audioUrl:"CORAZON.mp3"},
+    {title:"Canción 11",artist:"María Becerra",audioUrl:"PERDIDAMENTE.mp3"},
+    {title:"Canción 12",artist:"María Becerra",audioUrl:"AGORA.mp3"},
+    {title:"Canción 13",artist:"María Becerra",audioUrl:"QUE.mp3"},
+    {title:"Canción 14",artist:"María Becerra",audioUrl:"ElAmor.mp3"},
+    {title:"Canción 15",artist:"María Becerra",audioUrl:"Miénteme.mp3"},
+    {title:"Canción 16",artist:"María Becerra",audioUrl:"Mentirosa.mp3"},
+    {title:"Canción 17",artist:"María Becerra",audioUrl:"ADIOS.mp3"},
+    {title:"Canción 18",artist:"María Becerra",audioUrl:"7VIDAS.mp3"},
+    {title:"Canción 19",artist:"María Becerra",audioUrl:"VUELVES.mp3"},
+    {title:"Canción 20",artist:"María Becerra",audioUrl:"SEXO.mp3"},
+    {title:"Canción 21",artist:"María Becerra",audioUrl:"JOJO.mp3"},
+    {title:"Canción 22",artist:"María Becerra",audioUrl:"FRUTILLA.mp3"},
+    {title:"Canción 23",artist:"María Becerra",audioUrl:"HACE.mp3"},
+    {title:"Canción 24",artist:"María Becerra",audioUrl:"QUEMAS.mp3"},
+    {title:"Canción 25",artist:"María Becerra",audioUrl:"INSPIRADORA.mp3"},
+    {title:"Canción 26",artist:"María Becerra",audioUrl:"QUEGANAS.mp3"},
+    {title:"Canción 27",artist:"María Becerra",audioUrl:"CUANDO.mp3"},
+    {title:"Canción 28",artist:"María Becerra",audioUrl:"AUTOMATICO.mp3"},
+    {title:"Canción 29",artist:"María Becerra",audioUrl:"SLOW.mp3"},
+    {title:"Canción 30",artist:"María Becerra",audioUrl:"PIERDO.mp3"},
+    {title:"Canción 31",artist:"María Becerra",audioUrl:"ASI.mp3"},
+    {title:"Canción 32",artist:"María Becerra",audioUrl:"TATU.mp3"},
+    {title:"Canción 33",artist:"María Becerra",audioUrl:"MIAMOR.mp3"},
+];
+
+const audio = new Audio();
+audio.volume = 0.8;
+
+let currentIndex = 0;
+let isPlaying = false;
+
+const songList = document.getElementById("songList");
+const playButton = document.getElementById("playButton");
+const progress = document.getElementById("progress");
+
+function renderSongs(){
+    const query = document.getElementById("search").value.toLowerCase();
+
+    songList.innerHTML = "";
+
+    songsList.forEach((song,index)=>{
+        if(!song.title.toLowerCase().includes(query)) return;
+
+        const item = document.createElement("div");
+        item.className = "song" + (index === currentIndex ? " active" : "");
+
+        item.innerHTML = `
+            <span class="number">${String(index+1).padStart(2,"0")}</span>
+            <div class="song-name">
+                <strong>${song.title}</strong>
+                <small>${song.artist}</small>
+            </div>
+            <span class="duration">${song.audioUrl ? "▶" : "＋"}</span>
+        `;
+
+        item.onclick = ()=>playSong(index);
+        songList.appendChild(item);
+    });
+}
+
+function playSong(index){
+    currentIndex = index;
+    const song = songsList[index];
+
+    document.getElementById("currentTitle").textContent = song.title;
+    document.getElementById("currentArtist").textContent = song.artist;
+    document.getElementById("cover").textContent = "QUIMERA";
+
+    if(!song.audioUrl){
+        alert("Esta canción todavía no tiene un archivo asignado. Usa el botón 'Cargar canciones desde mi PC' para agregarla.");
+        renderSongs();
+        return;
+    }
+
+    audio.src = song.audioUrl;
+    audio.load();
+
+    audio.play().then(()=>{
+        isPlaying = true;
+        playButton.textContent = "Ⅱ";
+        renderSongs();
+    }).catch(()=>{
+        isPlaying = false;
+        playButton.textContent = "▶";
+        alert("No se pudo reproducir este archivo. Comprueba que exista y que el navegador permita acceder a su ubicación. Si abriste la página mediante un servidor web, copia los audios a la carpeta del proyecto y utiliza rutas relativas.");
+    });
+
+    renderSongs();
+}
+
+function togglePlay(){
+    if(!audio.src){
+        playSong(currentIndex);
+        return;
+    }
+
+    if(isPlaying){
+        audio.pause();
+        isPlaying = false;
+        playButton.textContent = "▶";
+    }else{
+        audio.play().then(()=>{
+            isPlaying = true;
+            playButton.textContent = "Ⅱ";
+        }).catch(()=>{
+            alert("No se pudo iniciar la reproducción.");
+        });
+    }
+}
+
+function nextSong(){
+    currentIndex = (currentIndex + 1) % songsList.length;
+    playSong(currentIndex);
+}
+
+function previousSong(){
+    if(audio.currentTime > 3){
+        audio.currentTime = 0;
+        return;
+    }
+    currentIndex = (currentIndex - 1 + songsList.length) % songsList.length;
+    playSong(currentIndex);
+}
+
+audio.addEventListener("timeupdate",()=>{
+    if(audio.duration && Number.isFinite(audio.duration)){
+        progress.value = (audio.currentTime/audio.duration)*100;
+        document.getElementById("currentTime").textContent = formatTime(audio.currentTime);
+        document.getElementById("totalTime").textContent = formatTime(audio.duration);
+    }
+});
+
+audio.addEventListener("ended",nextSong);
+
+progress.addEventListener("input",()=>{
+    if(audio.duration){
+        audio.currentTime = (progress.value/100)*audio.duration;
+    }
+});
+
+document.getElementById("volume").addEventListener("input",e=>{
+    audio.volume = e.target.value;
+});
+
+function formatTime(seconds){
+    if(!Number.isFinite(seconds)) return "0:00";
+    const min = Math.floor(seconds/60);
+    const sec = Math.floor(seconds%60);
+    return min + ":" + String(sec).padStart(2,"0");
+}
+
+document.getElementById("fileInput").addEventListener("change",event=>{
+    const files = Array.from(event.target.files);
+
+    if(!files.length) return;
+
+    files.forEach(file=>{
+        const availableIndex = songsList.findIndex(song=>!song.audioUrl);
+
+        if(availableIndex === -1){
+            songsList.push({
+                title:file.name.replace(/\.[^/.]+$/,""),
+                artist:"María Becerra",
+                audioUrl:URL.createObjectURL(file)
+            });
+        }else{
+            songsList[availableIndex].title = file.name.replace(/\.[^/.]+$/,"");
+            songsList[availableIndex].audioUrl = URL.createObjectURL(file);
+        }
+    });
+
+    renderSongs();
+    alert("¡Archivos agregados correctamente!");
+    event.target.value = "";
+});
+
+renderSongs();
+</script>
+</body>
+</html>
