@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -208,51 +207,39 @@ input[type=range]{
 
 <script>
 const songsList = [
-    {
-        title:"Canción 1",
-        artist:"María Becerra",
-        audioUrl:"RAMEN.mp3"
-    },
-    {
-        title:"XROSS",
-        artist:"María Becerra",
-        audioUrl:"INFINITOS.mp3"
-    },
-    {
-        title:"Canción 3",
-        artist:"María Becerra",
-        audioUrl:"CERQUITA.mp3"
-    },
-    {title:"Canción 4",artist:"María Becerra",audioUrl:"OJALA.mp3"},
-    {title:"Canción 5",artist:"María Becerra",audioUrl:"HASTA.mp3"},
-    {title:"Canción 6",artist:"María Becerra",audioUrl:"RECUERDO.mp3"},
-    {title:"Canción 7",artist:"María Becerra",audioUrl:"DESAFIANDO.mp3"},
-    {title:"Canción 8",artist:"María Becerra",audioUrl:"DOBLE.mp3"},
-    {title:"Canción 9",artist:"María Becerra",audioUrl:"ENTRE.mp3"},
-    {title:"Canción 10",artist:"María Becerra",audioUrl:"CORAZON.mp3"},
-    {title:"Canción 11",artist:"María Becerra",audioUrl:"PERDIDAMENTE.mp3"},
-    {title:"Canción 12",artist:"María Becerra",audioUrl:"AGORA.mp3"},
-    {title:"Canción 13",artist:"María Becerra",audioUrl:"QUE.mp3"},
-    {title:"Canción 14",artist:"María Becerra",audioUrl:"ElAmor.mp3"},
-    {title:"Canción 15",artist:"María Becerra",audioUrl:"Miénteme.mp3"},
-    {title:"Canción 16",artist:"María Becerra",audioUrl:"Mentirosa.mp3"},
-    {title:"Canción 17",artist:"María Becerra",audioUrl:"ADIOS.mp3"},
-    {title:"Canción 18",artist:"María Becerra",audioUrl:"7VIDAS.mp3"},
-    {title:"Canción 19",artist:"María Becerra",audioUrl:"VUELVES.mp3"},
-    {title:"Canción 20",artist:"María Becerra",audioUrl:"SEXO.mp3"},
-    {title:"Canción 21",artist:"María Becerra",audioUrl:"JOJO.mp3"},
-    {title:"Canción 22",artist:"María Becerra",audioUrl:"FRUTILLA.mp3"},
-    {title:"Canción 23",artist:"María Becerra",audioUrl:"HACE.mp3"},
-    {title:"Canción 24",artist:"María Becerra",audioUrl:"QUEMAS.mp3"},
-    {title:"Canción 25",artist:"María Becerra",audioUrl:"INSPIRADORA.mp3"},
-    {title:"Canción 26",artist:"María Becerra",audioUrl:"QUEGANAS.mp3"},
-    {title:"Canción 27",artist:"María Becerra",audioUrl:"CUANDO.mp3"},
-    {title:"Canción 28",artist:"María Becerra",audioUrl:"AUTOMATICO.mp3"},
-    {title:"Canción 29",artist:"María Becerra",audioUrl:"SLOW.mp3"},
-    {title:"Canción 30",artist:"María Becerra",audioUrl:"PIERDO.mp3"},
-    {title:"Canción 31",artist:"María Becerra",audioUrl:"ASI.mp3"},
-    {title:"Canción 32",artist:"María Becerra",audioUrl:"TATU.mp3"},
-    {title:"Canción 33",artist:"María Becerra",audioUrl:"MIAMOR.mp3"},
+    { title: "RAMEN PARA DOS", artist: "María Becerra", audioUrl: "RAMEN.mp3" },
+    { title: "INFINITOS COMO EL MAR", artist: "María Becerra", audioUrl: "INFINITOS.mp3" },
+    { title: "CERQUITA DE TI", artist: "María Becerra", audioUrl: "CERQUITA.mp3" },
+    { title: "OJALÁ", artist: "María Becerra", audioUrl: "OJALA.mp3" },
+    { title: "HASTA QUE ME ENAMORO", artist: "María Becerra", audioUrl: "HASTA.mp3" },
+    { title: "RECUERDO QUE NUNCA EXISTIÓ", artist: "María Becerra", audioUrl: "RECUERDO.mp3" },
+    { title: "DESAFIANDO EL DESTINO", artist: "María Becerra", audioUrl: "DESAFIANDO.mp3" },
+    { title: "DOBLE VIDA", artist: "María Becerra", audioUrl: "DOBLE.mp3" },
+    { title: "ENTRE NOSOTROS REMIX", artist: "María Becerra", audioUrl: "ENTRE.mp3" },
+    { title: "CORAZON VACIO", artist: "María Becerra", audioUrl: "CORAZON.mp3" },
+    { title: "PERDIDAMENTE", artist: "María Becerra", audioUrl: "PERDIDAMENTE.mp3" },
+    { title: "AGORA", artist: "María Becerra", audioUrl: "AGORA.mp3" },
+    { title: "QUE TU ME QUIERAS", artist: "María Becerra", audioUrl: "QUE.mp3" },
+    { title: "EL AMOR DE MI VIDA", artist: "María Becerra", audioUrl: "ElAmor.mp3" },
+    { title: "MIENTEME", artist: "María Becerra", audioUrl: "Miénteme.mp3" },
+    { title: "MENTIROSA REMIX", artist: "María Becerra", audioUrl: "Mentirosa.mp3" },
+    { title: "ADIOS", artist: "María Becerra", audioUrl: "ADIOS.mp3" },
+    { title: "7 VIDAS", artist: "María Becerra", audioUrl: "7VIDAS.mp3" },
+    { title: "VUELVES TRISTE", artist: "María Becerra", audioUrl: "VUELVES.mp3" },
+    { title: "SEXO ES LA MODA", artist: "María Becerra", audioUrl: "SEXO.mp3" },
+    { title: "JOJO", artist: "María Becerra", audioUrl: "JOJO.mp3" },
+    { title: "FRUTILLA DEL PASTEL", artist: "María Becerra", audioUrl: "FRUTILLA.mp3" },
+    { title: "HACE CALOR", artist: "María Becerra", audioUrl: "HACE.mp3" },
+    { title: "QUE MAS PUES?", artist: "María Becerra", audioUrl: "QUEMAS.mp3" },
+    { title: "INSPIRADORA", artist: "María Becerra", audioUrl: "INSPIRADORA.mp3" },
+    { title: "QUE GANAS DE COMERTE FT LUCKY BROWN Y JERE KLEIN", artist: "María Becerra", audioUrl: "QUEGANAS.mp3" },
+    { title: "CUANDO TE VI | CROSSOVER 5", artist: "María Becerra", audioUrl: "CUANDO.mp3" },
+    { title: "AUTOMATICO", artist: "María Becerra", audioUrl: "AUTOMATICO.mp3" },
+    { title: "SLOW IT DOWN", artist: "María Becerra", audioUrl: "SLOW.mp3" },
+    { title: "PIERDO LA CABEZA", artist: "María Becerra", audioUrl: "PIERDO.mp3" },
+    { title: "ASÍ", artist: "María Becerra", audioUrl: "ASI.mp3" },
+    { title: "TATU", artist: "María Becerra", audioUrl: "TATU.mp3" },
+    { title: "MI AMOR", artist: "María Becerra", audioUrl: "MIAMOR.mp3" }
 ];
 
 const audio = new Audio();
